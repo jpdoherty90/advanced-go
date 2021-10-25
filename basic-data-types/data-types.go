@@ -42,37 +42,45 @@ func sumIntArray(a []int) int {
 
 
 // Given a map[int]int return the max value without using range or []
+
+type hmap struct {
+	count     	int
+	flags     	uint8
+	B         	uint8
+	noverflow 	uint16
+	hash0     	uint32
+	buckets    	unsafe.Pointer
+	oldbuckets 	unsafe.Pointer
+	nevacuate  	uintptr
+}
+
 func getMapMaxVal(m map[int]int) int {
 
-	// *(*int)(unsafe.Pointer(uintptr(unsafe.Pointer(&p)) + uintptr(8)))
+	max := 0
 
-	mp := *(*int)(unsafe.Pointer(uintptr(unsafe.Pointer(&m)) + uintptr(16)))
-	fmt.Println(mp)
+	hmap := *(*hmap)(unsafe.Pointer(uintptr(unsafe.Pointer(&m)) + uintptr(16)))
 
-	// Some ideas:
-	// You can get the len in the header
-	// You have the pointer to the buckets
-	// You can use for len to iterate through values in buckets
-	// Maybe need a nested for loop?
-	// 
+	fmt.Println(hmap.count)
+	fmt.Println(hmap.buckets)
+	fmt.Println(hmap.hash0)
+	fmt.Println(hmap.B)
 
-
-	return 1
+	return max
 }
 
 func main() {
 
 	// Try out string length
-	// s := "hello, world"
-	// l := strLenSafe(s)
-	// fmt.Println(l)
-	// l = strLenUnsafe(s)
-	// fmt.Println(l)
+	s := "hello, world"
+	l := strLenSafe(s)
+	fmt.Println(l)
+	l = strLenUnsafe(s)
+	fmt.Println(l)
 
 	// Try out getting y coordinate
-	// p := Point{5, 3}
-	// y := getY(p)
-	// fmt.Println(y)
+	p := Point{5, 3}
+	y := getY(p)
+	fmt.Println(y)
 	
 	// Try out array sum
 	a := []int{2, 3, 5, 7, 11}
@@ -84,6 +92,7 @@ func main() {
 		1:	435,
 		2:	824,
 		3:	234,
+		4: 	123,
 	}
 	max := getMapMaxVal(m)
 	fmt.Println(max)
